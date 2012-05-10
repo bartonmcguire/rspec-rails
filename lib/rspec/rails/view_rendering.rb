@@ -8,6 +8,7 @@ RSpec.configure do |config|
   # `render_views` directly in example groups, so this aligns the two APIs,
   # but requires this workaround:
   config.add_setting :rendering_views, :default => false
+  config.add_setting :rails_view_path
 
   def config.render_views=(val)
     self.rendering_views = val
@@ -19,6 +20,10 @@ RSpec.configure do |config|
 
   def config.render_views?
     rendering_views
+  end
+
+  def config.view_path=(val)
+    self.rails_view_path = val
   end
 end
 
@@ -109,7 +114,7 @@ module RSpec
             controller.extend(EmptyTemplates)
             return
           end
-          controller.class.view_paths = "#{Rails.root}/app/views"
+          controller.class.view_paths = RSpec.configuration.rails_view_path
         end
 
         after do
