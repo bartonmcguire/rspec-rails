@@ -108,20 +108,18 @@ module RSpec
 
       included do
         before do
+          @_empty_view_path_set_delegator = EmptyTemplatePathSetDecorator.new(controller.class.view_paths)
           unless render_views?
-            @_empty_view_path_set_delegator = EmptyTemplatePathSetDecorator.new(controller.class.view_paths)
             controller.class.view_paths = ::ActionView::PathSet.new.push(@_empty_view_path_set_delegator)
             controller.extend(EmptyTemplates)
           end
-          if render_views?
-            controller.class.view_paths = RSpec.configuration.rails_view_path
-          end
+          # if render_views?
+          #   controller.class.view_paths = RSpec.configuration.rails_view_path
+          # end
         end
 
         after do
-          unless render_views?
-            controller.class.view_paths = @_empty_view_path_set_delegator.original_path_set
-          end
+          controller.class.view_paths = @_empty_view_path_set_delegator.original_path_set
         end
       end
     end
