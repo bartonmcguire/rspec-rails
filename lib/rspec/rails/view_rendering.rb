@@ -107,7 +107,9 @@ module RSpec
             @_empty_view_path_set_delegator = EmptyTemplatePathSetDecorator.new(controller.class.view_paths)
             controller.class.view_paths = ::ActionView::PathSet.new.push(@_empty_view_path_set_delegator)
             controller.extend(EmptyTemplates)
+            return
           end
+          controller.class.view_paths = "#{Rails.root}/app/views"
         end
 
         after do
